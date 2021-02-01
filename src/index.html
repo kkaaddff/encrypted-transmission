@@ -4,25 +4,32 @@
   <head>
     <meta charset="utf-8" />
     <title>encrypted-transmission</title>
-    <script>
-      Module = {}
-      Module.print = function (e) {
-        e
-        debugger
-      }
-    </script>
-    <script src="./md5.js"></script>
+    <script src="https://fintax-web-1257122416.file.myqcloud.com/static-resource/crypto-js.min.js"></script>
+    <script src="./index.js"></script>
   </head>
 
   <body>
+    <input type="text" id="input" />
+    <button class="btn">传输</button>
+
     <script>
-      // fetch('add.wasm')
-      //   .then((response) => response.arrayBuffer())
-      //   .then((bytes) => WebAssembly.instantiate(bytes))
-      //   .then((results) => {
-      //     debugger
-      //     console.log(results.instance.exports.add(1, 2)) // "3"
-      //   })
+      const privateKey1 = 2
+      let G = 123
+      document.querySelector('.btn').addEventListener('click', () => {
+        let publicKey = Number(document.querySelector('#input').value)
+        if (isNaN(publicKey)) {
+          alert('请输入数字')
+          return
+        }
+        const transferKey1 = mainWasm.gen_transfer_key(publicKey, privateKey1)
+        fetch('http://127.0.0.1:3001/', {
+          headers: { encrypted: btoa(`${publicKey}-${transferKey1}`) },
+        }).then((res) => {
+          res
+          // const AESKey1 = mainWasm.build_key(transferKey2, privateKey1)
+          debugger
+        })
+      })
     </script>
   </body>
 </html>

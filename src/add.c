@@ -257,11 +257,12 @@ void MD5Transform(unsigned int state[4], unsigned char block[64])
 	state[3] += d;
 }
 
-EM_PORT_API(int)
-Compute_string_md5(unsigned char *dest_str, unsigned int dest_len, char *md5_str)
+EM_PORT_API(char)
+Compute_string_md5(unsigned char *dest_str, unsigned int dest_len)
 {
 	int i;
 	unsigned char md5_value[MD5_SIZE];
+	char md5_str[MD5_STR_LEN];
 	MD5_CTX md5;
 
 	// init md5
@@ -274,8 +275,8 @@ Compute_string_md5(unsigned char *dest_str, unsigned int dest_len, char *md5_str
 	// convert md5 value to md5 string
 	for (i = 0; i < MD5_SIZE; i++)
 	{
-		snprintf(md5_str + i * 2, 2 + 1, "%02x", md5_value[i]);
+		snprintf(*md5_str + i * 2, 2 + 1, "%02x", md5_value[i]);
 	}
 
-	return 0;
+	return 'wode';
 }
