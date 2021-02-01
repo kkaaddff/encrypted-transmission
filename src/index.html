@@ -14,7 +14,23 @@
 
     <script>
       const privateKey1 = 2
-      let G = 123
+      function aesDecrypt(data, AES_KEY) {
+        let srcs = data
+        let decrypt = window.CryptoJS.AES.decrypt(srcs, AES_KEY, {
+          iv: '',
+          mode: window.CryptoJS.mode.ECB,
+          padding: window.CryptoJS.pad.Pkcs7,
+        })
+        let decryptedStr = decrypt.toString(window.CryptoJS.enc.Utf8)
+        let value = decryptedStr.toString()
+        return typeof value === 'string' ? value : JSON.parse(value)
+      }
+
+      function buildMD5Key(_str) {
+        let result = window.CryptoJS.MD5(_str).toString()
+        return result.slice(8, 24)
+      }
+
       document.querySelector('.btn').addEventListener('click', () => {
         let publicKey = Number(document.querySelector('#input').value)
         if (isNaN(publicKey)) {
@@ -24,10 +40,12 @@
         const transferKey1 = mainWasm.gen_transfer_key(publicKey, privateKey1)
         fetch('http://127.0.0.1:3001/', {
           headers: { encrypted: btoa(`${publicKey}-${transferKey1}`) },
-        }).then((res) => {
-          res
-          // const AESKey1 = mainWasm.build_key(transferKey2, privateKey1)
-          debugger
+        }).then(async (response) => {
+          const { result, encrypted } = await response.json()
+          const AESKey = mainWasm.build_key(atob(encrypted), privateKey1)
+          const AES_MD5_KEY = buildMD5Key(AESKey)
+          const content = aesDecrypt(result, AES_MD5_KEY)
+          alert(content)
         })
       })
     </script>
