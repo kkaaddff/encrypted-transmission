@@ -4,18 +4,25 @@
   <head>
     <meta charset="utf-8" />
     <title>encrypted-transmission</title>
+    <script>
+      Module = {}
+      Module.print = function (e) {
+        e
+        debugger
+      }
+    </script>
+    <script src="./md5.js"></script>
   </head>
 
   <body>
     <script>
-      fetch('add.wasm')
-        .then((response) => response.arrayBuffer())
-        .then((bytes) => WebAssembly.instantiate(bytes))
-        .then((results) => {
-          debugger
-          console.log(results.instance.exports.add(1, 2)) // "3"
-        })
+      // fetch('add.wasm')
+      //   .then((response) => response.arrayBuffer())
+      //   .then((bytes) => WebAssembly.instantiate(bytes))
+      //   .then((results) => {
+      //     debugger
+      //     console.log(results.instance.exports.add(1, 2)) // "3"
+      //   })
     </script>
   </body>
 </html>
-Î
